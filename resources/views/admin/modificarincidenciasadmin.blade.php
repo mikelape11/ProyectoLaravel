@@ -25,8 +25,7 @@
                         @csrf
                     <h2>Modificar datos de la incidencia</h2>
                     <br>
-                    Estado: <Select name="estado">
-                        <option selected value="{{ $dato->estado }}">{{ $dato->estado }}</option>
+                    Estado: <Select name="estado">{{ $dato->estado }}
                         <option value="Recibida">Recibida</option> 
                         <option value="Resuelta">Resuelta</option> 
                         <option value="En Proceso">En Proceso</option> 

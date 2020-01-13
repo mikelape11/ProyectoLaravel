@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Incidencias;
+use App\User;
 use Validator;
 use Auth;
 use DB;
 use Mail;
+use App\Rules\Averia;
 
 class ControladorIncidencias extends Controller
 {
@@ -22,8 +24,7 @@ class ControladorIncidencias extends Controller
             'aula' => 'required|regex:/^[0-9]{3}$/',
             'hora' => 'required',
             'equipo' => 'required|regex:/^HZ[0-9]{6}$/',
-            'id_averia' => 'required',
-        
+            'id_averia' => ['required', new Averia]
         ],[
             'required' => ':attribute es obligatorio',
             'numeric' => ':attribute tiene que ser numerico',
@@ -34,16 +35,19 @@ class ControladorIncidencias extends Controller
             'aula.regex' => ':attribute tiene que tener 3 digitos',
             'hora.regex' => ':attribute tiene que ser de formato hh:mm',
             'equipo.regex' => ':attribute tiene que tener HZ + 6 digitos',
+            
         ]);
 
         if($validator->fails()){
             return redirect()->back()-> withErrors($validator);
         }else{
-           
             $data = array('name' => Auth::user()->name);
             Mail::send('enviaremail', $data, function ($message){
                 $message->from('ik012108cac@plaiaundi.net', 'Email Enviado');
-                $message->to(Auth::user()->email)->subject('Incidencia Añadida');
+                $datos=User::select('email')->where('admin', 1)->get();
+                foreach($datos as $email){
+                    $message->to($email->email)->subject('Incidencia Añadida');
+                }
             });
             $datos = new Incidencias($request->all());
             $datos->id_profesor = Auth::user()->id;
@@ -121,6 +125,14 @@ class ControladorIncidencias extends Controller
         if($validator->fails()){
             return redirect()->back()-> withErrors($validator);
         }else{
+            $data = array('name' => Auth::user()->name);
+            Mail::send('enviaremailmod', $data, function ($message){
+                $message->from('ik012108cac@plaiaundi.net', 'Email Enviado');
+                $datos=User::select('email')->where('admin', 1)->get();
+                foreach($datos as $email){
+                    $message->to($email->email)->subject('Incidencia Añadida');
+                }
+            });
             //PARA QUE MODIFICQUE EN LA BBDD
             $datos = Incidencias::find($id);
             $datos->profesor = $request->get('profesor');
@@ -169,9 +181,12 @@ class ControladorIncidencias extends Controller
 
     public function ModificarDatosAdmin(Request $request, $id){
             $data = array('name' => Auth::user()->name);
-            Mail::send('enviaremail', $data, function ($message){
+            Mail::send('enviaremailmod', $data, function ($message){
                 $message->from('ik012108cac@plaiaundi.net', 'Email Enviado');
-                $message->to(Auth::user()->email)->subject('Incidencia Modificada');
+                $datos=User::select('email')->where('admin', 1)->get();
+                foreach($datos as $email){
+                    $message->to($email->email)->subject('Incidencia Añadida');
+                }
             });
             //PARA QUE MODIFICQUE EN LA BBDD
             $datos = Incidencias::find($id);

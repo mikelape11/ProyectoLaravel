@@ -17,8 +17,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('/redirect', 'Auth\LoginController@redirectToProvider');
 Route::get('/callback', 'Auth\LoginController@handleProviderCallback');
 Route::get('/logout', 'Auth\LoginController@logout');
@@ -52,10 +50,7 @@ Route::get('/nuevaincidencia', 'ControladorIncidencias@nuevaIncidencia');
 Route::post('/pasarincidencia', 'ControladorIncidencias@pasarincidencia');
 
 
-
-
 //USUARIO ADMINISTRADOR
-    Route::get('/homeadmin', 'HomeController@admin');
     Route::get('/verincidenciasadmin', 'ControladorIncidencias@verDatosAdmin')->middleware('admin');
     Route::get('/verincidenciasadmin2', 'ControladorIncidencias@verDatosDescAdmin');
     //Cargar la vista de las incidencias y ordena por fechas
