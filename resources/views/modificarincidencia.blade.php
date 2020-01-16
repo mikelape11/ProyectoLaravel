@@ -25,8 +25,6 @@
                         @csrf
                     <h2>Modificar datos de la incidencia</h2>
 
-                    Nombre: <input class="input is-primary" type="text" name="profesor" size="60px" value="{{ $dato->profesor }}"><br>
-                    <br>
                     Fecha: <input class="input is-info" type="date" name="fecha" size="60px" value="{{ $dato->fecha }}"><br>
                     <br>
                     Aula: <input class="input is-info" type="text" name="aula" size="60px" value="{{ $dato->aula }}"><br>
@@ -35,7 +33,8 @@
                     <br>
                     Equipo: <input class="input is-info" type="text" name="equipo" size="60px" value="{{ $dato->equipo }}"><br>
                     <br>
-                    Averia:<br> <div class="select is-info"><select name="id_averia">{{ $dato->id_averia }}
+                    Averia:<br> <div class="select is-info"><select name="id_averia">
+                        <option selected value="{{ $dato->id_averia}}">{{ $dato->id_averia}}</option>
                         <option value="No se enciende la CPU">No se enciende la CPU/ CPU ez da pizten</option> 
                         <option value="No se enciende la pantalla">No se enciende la pantalla/Pantaila ez da pizten</option> 
                         <option value="No entra en mi sesión">No entra en mi sesión/ ezin sartu nere erabiltzailearekin</option> 

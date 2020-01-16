@@ -25,11 +25,12 @@
                         @csrf
                     <h2>Modificar datos de la incidencia</h2>
                     <br>
-                    Estado: <Select name="estado">{{ $dato->estado }}
-                        <option value="Recibida">Recibida</option> 
-                        <option value="Resuelta">Resuelta</option> 
-                        <option value="En Proceso">En Proceso</option> 
-                        <option value="Rechazada">Rechazada</option> 
+                    Estado: <Select name="estado">
+                        <option selected value="{{ $dato->estado}}">{{ $dato->estado}}</option>
+                        <option value="1">Recibida</option> 
+                        <option value="2">Resuelta</option> 
+                        <option value="3">En Proceso</option> 
+                        <option value="4">Rechazada</option> 
                     </select>
                     <br><br>
                     Opinion Admin <input type="text" name="opinion" value="{{ $dato->opinion }}" size="60px"><br>

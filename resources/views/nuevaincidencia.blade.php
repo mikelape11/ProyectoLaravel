@@ -24,28 +24,26 @@
                     <form action="/pasarincidencia" method="post">
                         @csrf
                     <h2>Introducir datos de la incidencia</h2>
-                    Nombre: <input class="input is-primary" type="text" name="profesor" size="60px" value="{{ Auth::user()->name}}"><br>
+                    Fecha: <input class="input is-info" type="date" name="fecha" size="60px" value="{{old('fecha')}}" ><br>
                     <br>
-                    Fecha: <input class="input is-info" type="date" name="fecha" size="60px" value=""><br>
+                    Aula: <input class="input is-info" type="text" name="aula" size="60px" value="{{old('aula')}}"><br>
                     <br>
-                    Aula: <input class="input is-info" type="text" name="aula" size="60px"><br>
+                    Hora: <input class="input is-info" type="time" name="hora" size="60px" value="{{old('hora')}}"><br>
                     <br>
-                    Hora: <input class="input is-info" type="time" name="hora" size="60px"><br>
-                    <br>
-                    Equipo: <input class="input is-info" type="text" name="equipo" size="60px"><br>
+                    Equipo: <input class="input is-info" type="text" name="equipo" size="60px" value="{{old('equipo')}}"><br>
                     <br>
                     Averia:<br> <div class="select is-info"><select name="id_averia">
-                        <option selected value="EL usuario no ha elegido nada"> Elige una opción </option>
-                        <option value="No se enciende la CPU">No se enciende la CPU/ CPU ez da pizten</option> 
-                        <option value="No se enciende la pantalla">No se enciende la pantalla/Pantaila ez da pizten</option> 
-                        <option value="No entra en mi sesión">No entra en mi sesión/ ezin sartu nere erabiltzailearekin</option> 
-                        <option value="No navega en Internet">No navega en Internet/ Internet ez dabil</option> 
-                        <option value="No se oye el sonido">No se oye el sonido/ Ez da aditzen</option> 
-                        <option value="No lee el DVD/CD">No lee el DVD/CD</option> 
-                        <option value="Teclado roto">Teclado roto/ Tekladu hondatuta</option> 
-                        <option value="No funciona el ratón">No funciona el ratón/Xagua ez dabil</option> 
-                        <option value="Muy lento para entrar en la sesión">Muy lento para entrar en la sesión/oso motel dijoa</option>
-                        <option value="Otros">Otros/Beste batzuk</option>  
+                        <option selected value="{{old('id_averia')}}"> Elige una opción </option>
+                        <option value="1">No se enciende la CPU/ CPU ez da pizten</option> 
+                        <option value="2">No se enciende la pantalla/Pantaila ez da pizten</option> 
+                        <option value="3">No entra en mi sesión/ ezin sartu nere erabiltzailearekin</option> 
+                        <option value="4">No navega en Internet/ Internet ez dabil</option> 
+                        <option value="5">No se oye el sonido/ Ez da aditzen</option> 
+                        <option value="6">No lee el DVD/CD</option> 
+                        <option value="7">Teclado roto/ Tekladu hondatuta</option> 
+                        <option value="8">No funciona el ratón/Xagua ez dabil</option> 
+                        <option value="9">Muy lento para entrar en la sesión/oso motel dijoa</option>
+                        <option value="10">Otros/Beste batzuk</option>  
                     </select></div>
                     <br><br>
                     <center><input class="button is-success" type="submit" value="Enviar" style="float:right; margin-right: 35%;"></center>

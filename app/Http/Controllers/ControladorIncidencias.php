@@ -19,27 +19,22 @@ class ControladorIncidencias extends Controller
     //AÑADE LOS DATOS
     public function pasarincidencia(Request $request){
         $validator = Validator::make($request->all(),[
-            'profesor' => 'required|min:3|max:50',
-            'fecha' => 'required',
+            'fecha' => 'required|date_format:Y-m-d',
             'aula' => 'required|regex:/^[0-9]{3}$/',
-            'hora' => 'required',
+            'hora' => 'required|date_format:H:i',
             'equipo' => 'required|regex:/^HZ[0-9]{6}$/',
-            'id_averia' => ['required', new Averia]
+            'id_averia' => 'required|integer|between:1,10', 
         ],[
             'required' => ':attribute es obligatorio',
-            'numeric' => ':attribute tiene que ser numerico',
-            'alpha' => ':attribute tiene que ser solo letras',
-            'profesor.min' => ':attribute tiene que tener minimo 3 caracteres',
-            'profesor.max' => ':attribute tiene que tener maximo 20 caracteres',
-            'fecha.date_format' => ':attribute tiene que ser formato dd/mm/yy',
+            'fecha.date_format' => ':attribute tiene que ser formato Y-m-d',
+            'hora.date_format' => ':attribute tiene que ser formato hh:mm',
             'aula.regex' => ':attribute tiene que tener 3 digitos',
-            'hora.regex' => ':attribute tiene que ser de formato hh:mm',
             'equipo.regex' => ':attribute tiene que tener HZ + 6 digitos',
             
         ]);
 
         if($validator->fails()){
-            return redirect()->back()-> withErrors($validator);
+            return redirect()->back()-> withErrors($validator)->withInput();
         }else{
             $data = array('name' => Auth::user()->name);
             Mail::send('enviaremail', $data, function ($message){
@@ -49,8 +44,31 @@ class ControladorIncidencias extends Controller
                     $message->to($email->email)->subject('Incidencia Añadida');
                 }
             });
+            
             $datos = new Incidencias($request->all());
+            if($request->input('id_averia')=='1'){
+                $datos->id_averia = "No se enciende la CPU";
+            }else if($request->input('id_averia')=='2'){
+                $datos->id_averia = "No se enciende la pantalla";
+            }else if($request->input('id_averia')=='3'){
+                $datos->id_averia = "No entra en mi sesión";
+            }else if($request->input('id_averia')=='4'){
+                $datos->id_averia = "No navega en internet";
+            }else if($request->input('id_averia')=='5'){
+                $datos->id_averia = "No se oye el sonido";
+            }else if($request->input('id_averia')=='6'){
+                $datos->id_averia = "No lee el DVD";
+            }else if($request->input('id_averia')=='7'){
+                $datos->id_averia = "Teclado roto";
+            }else if($request->input('id_averia')=='8'){
+                $datos->id_averia = "No funciona el ratón";
+            }else if($request->input('id_averia')=='9'){
+                $datos->id_averia = "Muy lento para entrar el la sesión";
+            }else if($request->input('id_averia')=='10'){
+                $datos->id_averia = "Otro";
+            }
             $datos->id_profesor = Auth::user()->id;
+            $datos->profesor = Auth::user()->name;
             $datos->estado = 'En proceso';
             $datos->opinion = 'El administrador todavia no ha recibido la incidencia.';
             $datos->save();
@@ -102,24 +120,17 @@ class ControladorIncidencias extends Controller
     //MODIFICA O ACTUALIZA LOS DATOS INTRODUCIDOS EN EL FORMULARIO
     public function ModificarDatos(Request $request, $id){
         $validator = Validator::make($request->all(),[
-            'profesor' => 'required|min:3|max:50',
-            'fecha' => 'required',
+            'fecha' => 'required|date_format:Y-m-d',
             'aula' => 'required|regex:/^[0-9]{3}$/',
-            'hora' => 'required',
+            'hora' => 'required|date_format:H:i',
             'equipo' => 'required|regex:/^HZ[0-9]{6}$/',
             'id_averia' => 'required',       
         ],[
             'required' => ':attribute es obligatorio',
-            'numeric' => ':attribute tiene que ser numerico',
-            'alpha' => ':attribute tiene que ser solo letras',
-            'profesor.min' => ':attribute tiene que tener minimo 3 caracteres',
-            'profesor.max' => ':attribute tiene que tener maximo 20 caracteres',
-            'fecha.date_format' => ':attribute tiene que tener ser formato d/m/y',
+            'fecha.date_format' => ':attribute tiene que ser formato Y-m-d',
+            'hora.date_format' => ':attribute tiene que ser formato hh:mm',
             'aula.regex' => ':attribute tiene que tener 3 digitos',
-            'hora.regex' => ':attribute tiene que ser de formato hh:mm',
             'equipo.regex' => ':attribute tiene que tener HZ + 6 digitos',
-            
-            
         ]);
 
         if($validator->fails()){
@@ -135,7 +146,7 @@ class ControladorIncidencias extends Controller
             });
             //PARA QUE MODIFICQUE EN LA BBDD
             $datos = Incidencias::find($id);
-            $datos->profesor = $request->get('profesor');
+            $datos->id_profesor = Auth::user()->id;
             $datos->fecha = $request->get('fecha');
             $datos->aula = $request->get('aula');
             $datos->hora = $request->get('hora');
@@ -180,23 +191,39 @@ class ControladorIncidencias extends Controller
     }
 
     public function ModificarDatosAdmin(Request $request, $id){
-            $data = array('name' => Auth::user()->name);
-            Mail::send('enviaremailmod', $data, function ($message){
-                $message->from('ik012108cac@plaiaundi.net', 'Email Enviado');
-                $datos=User::select('email')->where('admin', 1)->get();
-                foreach($datos as $email){
-                    $message->to($email->email)->subject('Incidencia Añadida');
-                }
-            });
-            //PARA QUE MODIFICQUE EN LA BBDD
-            $datos = Incidencias::find($id);
-            $datos->estado = $request->get('estado');
-            $datos->opinion = $request->get('opinion');
-            
-            $datos->update();
-            return redirect('/verincidenciasadmin');
+
+        $validator = Validator::make($request->all(),[
+            'estado' => 'required|integer|between:1,4',
+            'opinion' => 'required|alpha',    
+        ],[
+            'required' => ':attribute es obligatorio',
+            'alpha' => ':attribute no puede tener numeros',
+        ]);
+        $data = array('name' => Auth::user()->name);
+        Mail::send('enviaremailmod', $data, function ($message){
+            $message->from('ik012108cac@plaiaundi.net', 'Email Enviado');
+            $datos=User::select('email')->where('admin', 1)->get();
+            foreach($datos as $email){
+                $message->to($email->email)->subject('Incidencia Añadida');
+            }
+        });
+        //PARA QUE MODIFICQUE EN LA BBDD
+        $datos = Incidencias::find($id);
+        if($request->input('estado')=='1'){
+            $datos->estado = "Recibida";
+        }else if($request->input('estado')=='2'){
+            $datos->estado = "Resuelta";
+        }else if($request->input('estado')=='3'){
+            $datos->estado = "En proceso";
+        }else if($request->input('estado')=='4'){
+            $datos->estado = "Rechazada";
         }
+        $datos->opinion = $request->get('opinion');
+        
+        $datos->update();
+        return redirect('/verincidenciasadmin');
     }
+}
 
 
         
