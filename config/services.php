@@ -32,8 +32,8 @@ return [
 
     //.env 
     'google' => [
-        'client_id' => '1097085335169-7prh223mm5bn2f2quant232t0jrusvkf.apps.googleusercontent.com',
-        'client_secret' => 'bz50udcmnydF1UiW2bhmoJrU',
+        'client_id' => '??',
+        'client_secret' => '??',
         'redirect' => 'http://10.10.17.224.xip.io:8000/callback',
     ],
 
