@@ -4,7 +4,7 @@
     background-color: #2d3436;
     background-image: linear-gradient(315deg, #d3d3d3 0%, #2d3436 74%);
     background-attachment: fixed;
-    height: 100%;
+    height: 112%;
    }
 
 </style>
