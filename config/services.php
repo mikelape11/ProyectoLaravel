@@ -32,9 +32,9 @@ return [
 
     //.env 
     'google' => [
-        'client_id' => '??',
-        'client_secret' => '??',
-        'redirect' => 'http://10.10.17.224.xip.io:8000/callback',
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT'),
     ],
 
 ];
