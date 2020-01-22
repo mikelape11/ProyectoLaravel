@@ -100,6 +100,8 @@ class ControladorIncidencias extends Controller
 
     //ENSEÑA LOS DETALLES DE CADA ID SELECCIONADO
     public function verDetalle($i){
+        $datos = Incidencias::find($i);
+        $this->authorize('view',$datos);
         $datos=Incidencias::select('id', 'id_averia', 'estado', 'opinion')->where('id', $i)->get();
         return view('detallesincidencia')->with('datos', $datos);
     }
@@ -107,18 +109,23 @@ class ControladorIncidencias extends Controller
     //ELIMINA EL ID SELECCIONADO
     public function eliminarDatos($id){
         $datos = Incidencias::find($id);
+        $this->authorize('view',$datos);
         $datos->delete();
         return redirect('/verincidencia');
     }
 
     //ENSEÑA EL FORMULARIO PARA MODIFICAR LOS DATOS
     public function verModificarDatos($i){
+        $datos = Incidencias::find($i);
+        $this->authorize('view',$datos);
         $datos=Incidencias::select('id', 'profesor', 'fecha', 'aula', 'hora', 'equipo', 'id_profesor', 'id_averia')->where('id', $i)->get();
         return view('modificarincidencia')->with('datos', $datos);
     }
 
     //MODIFICA O ACTUALIZA LOS DATOS INTRODUCIDOS EN EL FORMULARIO
     public function ModificarDatos(Request $request, $id){
+        $datos = Incidencias::find($id);
+        $this->authorize('view',$datos);
         $validator = Validator::make($request->all(),[
             'fecha' => 'required|date_format:Y-m-d',
             'aula' => 'required|regex:/^[0-9]{3}$/',
