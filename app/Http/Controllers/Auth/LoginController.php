@@ -61,7 +61,7 @@ public function redirectToProvider()
             return redirect('/login');
         }
         // only allow people with @company.com to login
-         if((explode("@", $user->email)[1] !== 'plaiaundi.net') or (explode("@", $user->email)[1] !== 'plaiaundi.com')){
+         if(explode("@", $user->email)[1] !== 'plaiaundi.net'){
             return redirect()->to('/loginerror');
         }
         // check if they're an existing user
