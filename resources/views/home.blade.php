@@ -31,7 +31,7 @@
 
                     <center><h4>Menu Usuario</h4><center>
                     
-                    <a href="/nuevaincidencia"><button id="boton1"> Crear nueva incidencia</button></a><br><br>
+                    <a href="/nuevaincidencia"><button id="boton1"> Crear nueva incidenciaaaaaaa</button></a><br><br>
                     <a href="/verincidencia"><button id="boton2">Ver lista de incidencias</button></a>
                     
                 </div>
